@@ -93,7 +93,7 @@ class CookiesGenerator(object):
             print('Closing Browser')
             self.browser.close()
             del self.browser
-        except TypeError:
+        except Exception:
             print('Browser not opened')
 
 

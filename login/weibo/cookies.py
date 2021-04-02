@@ -35,7 +35,18 @@ class WeiboCookies():
         password.send_keys(self.password)
         time.sleep(1)
         submit.click()
-    
+
+    def login_exception(self):
+        """
+        判断是否密码错误
+        :return:
+        """
+        try:
+            return WebDriverWait(self.browser, 5).until(
+                EC.text_to_be_present_in_element((By.ID, 'errorMsg'), '用户名或密码错误'))
+        except TimeoutException:
+            return False
+
     def password_error(self):
         """
         判断是否密码错误
@@ -46,7 +57,15 @@ class WeiboCookies():
                 EC.text_to_be_present_in_element((By.ID, 'errorMsg'), '用户名或密码错误'))
         except TimeoutException:
             return False
-    
+
+    def click(self):
+        try:
+            clickBox = self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'geetest_radar_tip_content')))
+            time.sleep(1)
+            clickBox.click()
+        except :
+            return False
+
     def need_verify(self):
         """
         判断是否需要进行验证
@@ -103,7 +122,7 @@ class WeiboCookies():
         """
         try:
             return bool(
-                WebDriverWait(self.browser, 5).until(EC.presence_of_element_located((By.CLASS_NAME, 'lite-iconf-profile'))))
+                WebDriverWait(self.browser, 60).until(EC.presence_of_element_located((By.CLASS_NAME, 'lite-iconf-profile'))))
         except TimeoutException:
             return False
     
@@ -251,7 +270,7 @@ class WeiboCookies():
         if self.password_error():
             return {
                 'status': 2,
-                'content': '用户名或密码错误'
+                'content': '用户名或密码错误、账号停用保护'
             }
 
         if self.need_verify():
@@ -269,21 +288,23 @@ class WeiboCookies():
                 'status': 1,
                 'content': cookies
             }
-        # 获取验证码图片
-        image = self.get_image('captcha.png')
-        numbers = self.detect_image(image)
-        self.move(numbers)
-        if self.login_successfully():
-            cookies = self.get_cookies()
-            return {
-                'status': 1,
-                'content': cookies
-            }
-        else:
-            return {
-                'status': 3,
-                'content': '登录失败'
-            }
+
+        print('登录结束')
+        # # 获取验证码图片
+        # image = self.get_image('captcha.png')
+        # numbers = self.detect_image(image)
+        # self.move(numbers)
+        # if self.login_successfully():
+        #     cookies = self.get_cookies()
+        #     return {
+        #         'status': 1,
+        #         'content': cookies
+        #     }
+        # else:
+        #     return {
+        #         'status': 3,
+        #         'content': '登录失败'
+        #     }
 
 
 if __name__ == '__main__':
