@@ -4,6 +4,7 @@ from PIL import Image
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from os import listdir
@@ -46,6 +47,55 @@ class WeiboCookies():
         except TimeoutException:
             return False
     
+    def need_verify(self):
+        """
+        判断是否需要进行验证
+        :return:
+        """
+        try:
+            return bool(self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'my-mesg-box'))))
+        except TimeoutException:
+            return False
+
+    def send_sns_code(self):
+        """
+        判断是否需要进行验证
+        :return:
+        """
+        try:
+            btn = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.my-btn-box a')))
+            print(btn.get_attribute("textContent"))
+            btn.send_keys(Keys.ENTER)
+        except TimeoutException:
+            return False
+
+    def go_to_send_private_page(self):
+        """
+        进入发送私信页面
+        :return:
+        """
+        try:
+            btn = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.my-mesg-box a')))
+            print(btn.get_attribute("textContent"))
+            btn.send_keys(Keys.ENTER)
+            popupbtn = self.wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="vdVerify"]/div[3]/div[2]/div[1]/div/div/div/a')))
+            print(popupbtn.get_attribute("textContent"))
+            popupbtn.send_keys(Keys.ENTER)
+        except TimeoutException:
+            return False
+
+    def send_code_error(self):
+        """
+        判断发送验证码是否出现错误
+        :return:
+        """
+        try:
+            box = self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'my-error-box')))
+            print(box.get_attribute("textContent"))
+            return bool(box)
+        except TimeoutException:
+            return False
+
     def login_successfully(self):
         """
         判断是否登录成功
@@ -203,6 +253,15 @@ class WeiboCookies():
                 'status': 2,
                 'content': '用户名或密码错误'
             }
+
+        if self.need_verify():
+            print('需要检验')
+            # self.send_sns_code()
+            self.go_to_send_private_page()
+
+        if self.send_code_error():
+            pass
+
         # 如果不需要验证码直接登录成功
         if self.login_successfully():
             cookies = self.get_cookies()
