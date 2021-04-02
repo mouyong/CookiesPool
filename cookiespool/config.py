@@ -7,6 +7,9 @@ REDIS_PORT = 6379
 # Redis密码，如无填None
 REDIS_PASSWORD = 'foobared'
 
+# Redis db
+REDIS_DB=0
+
 # 产生器使用的浏览器
 BROWSER_TYPE = 'Chrome'
 

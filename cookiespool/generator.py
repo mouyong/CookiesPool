@@ -1,5 +1,6 @@
 import json
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver import DesiredCapabilities
 from cookiespool.config import *
 from cookiespool.db import RedisClient
@@ -33,7 +34,15 @@ class CookiesGenerator(object):
             self.browser = webdriver.PhantomJS(desired_capabilities=caps)
             self.browser.set_window_size(1400, 500)
         elif BROWSER_TYPE == 'Chrome':
-            self.browser = webdriver.Chrome()
+            chrome_options = Options()
+
+            # mobileEmulation = {'deviceName': 'iPhone 6/7/8 Plus'}
+            # chrome_options.add_experimental_option('mobileEmulation', mobileEmulation)
+            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--ignore-certificate-errors')
+            chrome_options.add_argument('--ignore-ssl-errors')
+
+            self.browser = webdriver.Chrome(chrome_options=chrome_options)
     
     def new_cookies(self, username, password):
         """

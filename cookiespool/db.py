@@ -4,14 +4,14 @@ from cookiespool.config import *
 
 
 class RedisClient(object):
-    def __init__(self, type, website, host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD):
+    def __init__(self, type, website, host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD, db=REDIS_DB):
         """
         初始化Redis连接
         :param host: 地址
         :param port: 端口
         :param password: 密码
         """
-        self.db = redis.StrictRedis(host=host, port=port, password=password, decode_responses=True)
+        self.db = redis.StrictRedis(host=host, port=port, password=password, decode_responses=True, db=db)
         self.type = type
         self.website = website
 
