@@ -27,6 +27,6 @@ vim cookiespool/config.py # 修改对应的 redis 配置信息
 
 见 `cookiespool/api.py`。
 
-- 随机获取 1个账号 cookie: /<website>/random
-- 添加账号：/<website>/add/<username>/<password>
-- 查看站点可用 cookie 总数：/<website>/count
+- 随机获取 1个账号 cookie: `/<website>/random`
+- 添加账号：`/<website>/add/<username>/<password>`
+- 查看站点可用 cookie 总数：`/<website>/count`
