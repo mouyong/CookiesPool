@@ -5,7 +5,11 @@ from selenium.webdriver import DesiredCapabilities
 from cookiespool.config import *
 from cookiespool.db import RedisClient
 from login.weibo.cookies import WeiboCookies
+from login.yuqing_sina.cookies import YuQingSinaCookies
+import requests
 
+
+handless=False
 
 class CookiesGenerator(object):
     def __init__(self, website='default'):
@@ -38,7 +42,9 @@ class CookiesGenerator(object):
 
             # mobileEmulation = {'deviceName': 'iPhone 6/7/8 Plus'}
             # chrome_options.add_experimental_option('mobileEmulation', mobileEmulation)
-            chrome_options.add_argument('--headless')
+            if handless == True:
+                chrome_options.add_argument('--headless')
+
             chrome_options.add_argument('--ignore-certificate-errors')
             chrome_options.add_argument('--ignore-ssl-errors')
 
@@ -126,6 +132,55 @@ class WeiboCookiesGenerator(CookiesGenerator):
         return WeiboCookies(username, password, self.browser).main()
 
 
+class YuQingSinaCookiesGenerator(CookiesGenerator):
+    def __init__(self, website='yuqing_sina'):
+        """
+        初始化操作
+        :param website: 站点名称
+        :param browser: 使用的浏览器
+        """
+        CookiesGenerator.__init__(self, website)
+        self.website = website
+    
+    def new_cookies(self, username, password):
+        """
+        生成Cookies
+        :param username: 用户名
+        :param password: 密码
+        :return: 用户名和Cookies
+        """
+        cookies_result = YuQingSinaCookies(username, password, self.browser).main()
+
+        if (cookies_result['status'] == 1):
+            print(cookies_result['content'], 222)
+
+        return cookies_result
+
+    def process_cookies(self, cookies):
+        """
+        处理Cookies
+        :param cookies:
+        :return:
+        """
+        dict = CookiesGenerator.process_cookies(self, cookies)
+        
+        self.save_to_yuqing(dict)
+        
+        return dict
+    
+    def save_to_yuqing(self, cookieDict):
+        cookieList = []
+        for key in cookieDict:
+            cookieList.append('{}={}; '.format(key, cookieDict[key]))
+        
+        cookieStr = ''.join(cookieList)
+
+
+        # http://test3.service.cblink.net/admin/cookies/bazhuayu
+        resp = requests.post(url="http://test2.service.cblink.net/api/cookie/save", json={"type": 'bazhuayu', 'cookie': cookieStr})
+
+        return cookieStr
+
 if __name__ == '__main__':
-    generator = WeiboCookiesGenerator()
+    generator = YuQingSinaCookiesGenerator()
     generator.run()
