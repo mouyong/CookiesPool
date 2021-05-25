@@ -79,13 +79,13 @@ class YuQingSinaValidTester(ValidTester):
             if COOKIE_VALID_FLAG:
                 print('Cookies有效', username)
             else:
-                print(response.status_code, response.headers)
                 print('Cookies失效', username)
-                # self.cookies_db.delete(username)
+                self.cookies_db.delete(username)
                 print('删除Cookies', username)
 
-                resp = requests.post(url="http://test2.service.cblink.net/api/feishu/notify", json={'user_ids':('ou_088bf5b9e840bf88b91c094a3611bd6c',),'content':'八爪鱼 cookie 已过期'})
-                print('飞书通知')
+                cookieResp = requests.post(url="http://test2.service.cblink.net/api/cookie/save", json={"type": 'bazhuayu', 'cookie': ''})
+                feiShuR1esp = requests.post(url="http://test2.service.cblink.net/api/feishu/notify", json={'user_ids':('ou_088bf5b9e840bf88b91c094a3611bd6c', 'ou_871984d39cf0a811f4fa2d6f6e71cd11',),'content':'八爪鱼 cookie 已过期'})
+                print('飞书通知', username)
         except ConnectionError as e:
             print('发生异常', e.args)
 
