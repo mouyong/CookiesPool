@@ -64,7 +64,9 @@ class YuQingSinaValidTester(ValidTester):
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
             }
-            response = requests.get(test_url, cookies=cDict, headers=headers, timeout=10, allow_redirects=True)
+
+            response = requests.get(test_url, cookies=cookies, headers=headers, timeout=10, allow_redirects=True)
+
             if response.text.find('啊哦，你访问的页面，已经跟着地球去流浪了！') == -1:
                 print('Cookies有效', username)
             else:
@@ -72,8 +74,11 @@ class YuQingSinaValidTester(ValidTester):
                 print('Cookies失效', username)
                 self.cookies_db.delete(username)
                 print('删除Cookies', username)
+
+            resp = requests.post(url="http://test2.service.cblink.net/api/feishu/notify", json={'user_ids':('ou_088bf5b9e840bf88b91c094a3611bd6c',),'content':'cookies已过期'})
+            print('飞书通知')
         except ConnectionError as e:
             print('发生异常', e.args)
 
 if __name__ == '__main__':
-    WeiboValidTester().run()
+    YuQingSinaValidTester().run()
