@@ -20,11 +20,13 @@ GENERATOR_MAP = {
 
 # 测试类，如扩展其他站点，请在此配置
 TESTER_MAP = {
-    'weibo': 'WeiboValidTester'
+    'weibo': 'WeiboValidTester',
+    'yuqing_sina': 'YuQingSinaValidTester'
 }
 
 TEST_URL_MAP = {
-    'weibo': 'https://m.weibo.cn/'
+    'weibo': 'https://m.weibo.cn/',
+    'yuqing_sina': 'http://yuqing.sina.com/yqMonitor',
 }
 
 # 产生器和验证器循环周期

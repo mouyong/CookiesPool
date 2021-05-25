@@ -45,5 +45,35 @@ class WeiboValidTester(ValidTester):
         except ConnectionError as e:
             print('发生异常', e.args)
 
+
+class YuQingSinaValidTester(ValidTester):
+    def __init__(self, website='yuqing_sina'):
+        ValidTester.__init__(self, website)
+    
+    def test(self, username, cookies):
+        print('正在测试Cookies', '用户名', username)
+        try:
+            cookies = json.loads(cookies)
+        except TypeError:
+            print('Cookies不合法', username)
+            self.cookies_db.delete(username)
+            print('删除Cookies', username)
+            return
+        try:
+            test_url = TEST_URL_MAP[self.website]
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+            }
+            response = requests.get(test_url, cookies=cDict, headers=headers, timeout=10, allow_redirects=True)
+            if response.text.find('啊哦，你访问的页面，已经跟着地球去流浪了！') == -1:
+                print('Cookies有效', username)
+            else:
+                print(response.status_code, response.headers)
+                print('Cookies失效', username)
+                self.cookies_db.delete(username)
+                print('删除Cookies', username)
+        except ConnectionError as e:
+            print('发生异常', e.args)
+
 if __name__ == '__main__':
     WeiboValidTester().run()
