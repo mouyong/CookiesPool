@@ -95,9 +95,7 @@ class YuQingSinaCookies():
         :return:
         """
         try:
-            input('waiting\n')
             if True:
-               # self.browser.refresh()
                 xpathStr = '/html/body/app-root/layout-default/layout-header/div/div[2]/app-navbar-router/ul/li[2]/a'
             else:
                 self.browser.get('http://yuqing.sina.com/yqMonitor')
@@ -136,8 +134,6 @@ class YuQingSinaCookies():
         # 如果不需要验证码直接登录成功
         if self.login_successfully():
             cookies = self.get_cookies()
-            print(cookies)
-            input('waiting\n')
             return {
                 'status': 1,
                 'content': cookies
