@@ -26,6 +26,7 @@ TESTER_MAP = {
 
 TEST_URL_MAP = {
     'weibo': 'https://m.weibo.cn/',
+    # 'yuqing_sina': 'http://yuqing.sina.com/gateway/monitor/api/user/auth/menu/custom/head/list',
     'yuqing_sina': 'http://yuqing.sina.com/yqMonitor',
 }
 

@@ -151,7 +151,7 @@ class YuQingSinaCookiesGenerator(CookiesGenerator):
         """
         cookies_result = YuQingSinaCookies(username, password, self.browser).main()
 
-        if (cookies_result['status'] == 1):
+        if cookies_result and (cookies_result['status'] == 1):
             print(cookies_result['content'], 222)
 
         return cookies_result

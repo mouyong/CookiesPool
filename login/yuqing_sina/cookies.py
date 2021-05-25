@@ -30,8 +30,7 @@ class YuQingSinaCookies():
         password.send_keys(self.password)
 
         time.sleep(1)
-        input('已完成输入验证码？\n')
-        submit.click()
+        input('已完成输入验证码并进入下一步？\n')
 
     def login_exception(self):
         """
@@ -75,8 +74,7 @@ class YuQingSinaCookies():
         sendSnsBtn = WebDriverWait(self.browser, 5).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div[2]/div/nz-modal/div/div[2]/div/div/div/div[2]/div[2]/button')))
         submit = WebDriverWait(self.browser, 5).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div[2]/div/nz-modal/div/div[2]/div/div/div/div[2]/div[3]/button')))
 
-        input('已完成输入短信验证码？\n')
-        submit.click()
+        input('已完成输入短信验证码并进入下一步？\n')
 
     def send_code_error(self):
         """
@@ -97,9 +95,16 @@ class YuQingSinaCookies():
         :return:
         """
         try:
-            self.browser.get('http://yuqing.sina.com/yqMonitor')
+            input('waiting\n')
+            if True:
+               # self.browser.refresh()
+                xpathStr = '/html/body/app-root/layout-default/layout-header/div/div[2]/app-navbar-router/ul/li[2]/a'
+            else:
+                self.browser.get('http://yuqing.sina.com/yqMonitor')
+                xpathStr = '/html/body/div[1]/ul[1]/li[2]/a/span'
+
             return bool(
-                WebDriverWait(self.browser, 60).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/ul[1]/li[2]/a/span'))))
+                WebDriverWait(self.browser, 60).until(EC.presence_of_element_located((By.XPATH, xpathStr))))
         except TimeoutException:
             return False
 
@@ -131,6 +136,8 @@ class YuQingSinaCookies():
         # 如果不需要验证码直接登录成功
         if self.login_successfully():
             cookies = self.get_cookies()
+            print(cookies)
+            input('waiting\n')
             return {
                 'status': 1,
                 'content': cookies
