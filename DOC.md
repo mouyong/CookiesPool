@@ -23,6 +23,10 @@ vim cookiespool/config.py # 修改对应的 redis 配置信息
 注：在 `cookiespool/importer.py` 中配置要添加的站点账号
 `conn = RedisClient('accounts', 'weibo')`
 
+## 设置是否无头模式
+
+需要访问浏览器控制端，进行页面操作，如重新登录账号时，修改 cookiespool/generator.py:12，设置 handless=False，然后重新运行 `python run.py`
+
 ## API
 
 见 `cookiespool/api.py`。
